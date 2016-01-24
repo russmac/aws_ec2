@@ -4,8 +4,8 @@ require './lib/ec2.rb'
 
 dev_www=Ec2.new('dev-www')
 
-dev_www.start
+dev_www.start_instance
  
 #Do things
 
-dev_www.stop
+dev_www.stop_instance
