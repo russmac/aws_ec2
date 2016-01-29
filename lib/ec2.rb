@@ -9,11 +9,16 @@ class Ec2
   # Find our targeted instance "Name" and make a list of AWS::Ec2:Instances objects
   def create_instance_list(target)
     list=Hash.new
+    x=1
     @ec2.instances.each do |i|
       i.tags.each do |t|
         if t.key == 'Name'
-          if t.value == "#{@target}"
-            list[:"'#{@target}'"]=i
+          if t.value == "#{target}"
+            unless list[:"'#{target}'"].nil?
+              target="#{target}" + "_#{x}"
+              x+=1
+            end
+            list[:"'#{target}'"]=i
           end
         end
       end
