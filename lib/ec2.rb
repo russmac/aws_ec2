@@ -50,7 +50,11 @@ class Ec2
                                           name: "#{target}_#{iobject.id}" + Time.now.strftime('%Y_%d_%m_%H-%M_%S_%Z').to_s,
                                           description: "#{target}_#{iobject.id}" + Time.now.strftime('%Y_%d_%m_%H-%M_%S_%Z').to_s + 'scripted_backup',
                                           no_reboot: true)
-      puts "Created ami from #{target}: #{response.image_id}"
+      if response.successful?
+        puts "Ami created : "+"#{target}_#{iobject.id} " + Time.now.strftime('%Y_%d_%m_%H-%M_%S_%Z').to_s
+      else
+        raise AwsError "AMI request returned error"
+      end
       unless @ec2.client.create_tags(
         resources: [response.image_id.to_s],
         tags: [
@@ -64,7 +68,7 @@ class Ec2
           }
         ]
       )
-        abort "Could not tag image #{target}: #{response.image_id}"
+        raise AwsError "Could not tag image #{target}: #{response.image_id}"
       end
     end
   end

@@ -1,6 +1,9 @@
 # aws_ec2
 Aws ec2 class to do stuff using the Ruby SDK.
 
+It takes AMI's using epoch and a backup key and can purge them on different retention periods.
+
+It can start and stop instances.
 
 ## Note this requires default credentials:
 http://docs.aws.amazon.com/AWSSdkDocsRuby/latest//DeveloperGuide/prog-basics-creds.html#creds-default
@@ -20,11 +23,14 @@ http://docs.aws.amazon.com/AWSSdkDocsRuby/latest//DeveloperGuide/prog-basics-cre
 ```
 require './lib/ec2.rb'
 
+# The name must match the instance "Name" tag value exactly
 dev_www=Ec2.new('dev-www')
 
-dev_www.create_image('critical_backup')
+# The key name, So when you deregister you can purge on different retentions
+dev_www.create_ami('critical_backup')
 
-dev_www.deregister_images('critical_backup','30')
+# Key name and days of retention
+dev_www.deregister_ami('critical_backup','30')
 
 dev_www.start_instance
  
